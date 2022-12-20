@@ -1,0 +1,105 @@
+@page "/listuser"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+
+<PageTitle>List User</PageTitle>   
+
+<h1>List User</h1>
+
+<p>This component shows the list of User.</p>
+
+@if (user == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nama</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Street</th>
+                <th>Geo</th>
+                <th>Phone</th>
+                <th>Website</th>
+                <th>CompanyName</th>
+            </tr>
+        </thead>
+        <tbody> 
+            @foreach (var ur in user)
+            {
+                <tr>
+                    <td>@ur.id</td>
+                    <td>@ur.name</td>
+                    <td>@ur.username</td>
+                    <td>@ur.email</td>
+                    <td>@ur.address</td>
+                    <td>@ur.lat</td>
+                    <td>@ur.phone</td>
+                    <td>@ur.web</td>
+                    <td>@ur.name</td>
+                    @* <button class="btn btn-warning m-1"><a href="/updatemhs?id=@mh.id&nama=@mh.nama&nim=@mh.nim&alamat=@mh.alamat&email=@mh.email&foto=@mh.foto">Update</a></button> *@
+                    @* <a><button asp-page-handler="Delete" asp-route-id="@MahasiswaList.id" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-danger btn-sm">Delete</button></a>  *@
+                </tr>
+            }
+        </tbody>
+        <tbody>
+            @* <div class="card-footer text-center">
+                <a href="addMhs" class="btn btn-success m-1">ADD</a>
+        </div> *@
+        </tbody>
+    </table>
+}
+
+@code {
+ 
+    private User2[]? user2;
+    protected override async Task OnInitializedAsync()
+    {
+        user = await Http.GetFromJsonAsync<List<User>>("https://jsonplaceholder.typicode.com/users");
+           
+    }
+
+    protected List<User> searchUserData = new();
+    protected List<User> user = new();
+    protected string SearchString { get; set;} = string.Empty;
+    protected void CariData(){
+        
+    }
+
+    public class User2
+    {
+        public int id { get; set; }
+
+        public string? name { get; set; }
+
+        public string? username { get; set; }
+
+        public string? email { get; set; }
+
+        public string? address { get; set; }
+
+        public string? phone { get; set; }
+
+        public string? web { get; set; }
+
+        public string? company { get; set; }
+        
+        public string? street { get; set; }
+        public string? suite { get; set; }
+        public string? city { get; set; }
+        public string? zipcode { get; set; }
+        public string? lat { get; set; }
+        public string? lng { get; set; }
+        public string? companyName { get; set; }
+        public string? catchPhrase { get; set; }
+        public string? bs { get; set; }
+    }
+} 
+
+

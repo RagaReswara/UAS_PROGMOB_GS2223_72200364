@@ -1,0 +1,71 @@
+@page "/mahasiswa"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+
+<PageTitle>List Mahasiswa</PageTitle>
+
+<h1>Mahasiswa SI UKDW</h1>
+
+<p>This component demonstrates fetching data Mahasiswa from the server.</p>
+
+@if (mhs == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <NavLink class="btn btn-primary" href="/mahasiswa/tambah">ADD</NavLink>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>NAMA</th>
+                <th>NIM</th>
+                <th>ALAMAT</th>
+                <th>AKSI</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var mh in mhs)
+            {
+                <tr>
+                    <td>@mh.id</td>
+                    <td>@mh.nama</td>
+                    <td>@mh.nim</td>
+                    <td>@mh.alamat</td>
+                    <td>
+                        <NavLink class="btn btn-primary" href='@("/mahasiswa/ubah/72200364/"+mh.id+"/"+mh.nim)'>Ubah</NavLink>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Mahasiswa[]? mhs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        mhs = await Http.GetFromJsonAsync<Mahasiswa[]>("https://kpsi.fti.ukdw.ac.id/api/progmob/mhs/72200364");
+    }
+
+    public class Mahasiswa
+    {
+        public int id { get; set; }
+
+        public string nama { get; set; }
+
+        public string nim { get; set; }
+
+        public string nim_progmob { get; set; }
+
+        public string alamat { get; set; }
+
+        public string email { get; set; }
+
+        public string foto { get; set; }
+    }
+}

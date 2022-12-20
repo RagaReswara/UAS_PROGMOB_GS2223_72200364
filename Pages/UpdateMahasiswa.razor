@@ -1,0 +1,71 @@
+@page "/updateMhs"
+@using System.Net.Http
+@using System.Net.Http.Json
+@using System.Threading.Tasks
+@inject HttpClient Http
+
+<PageTitle>Update Mahasiswa</PageTitle>   
+
+<h1>Update Mahasiswa</h1>
+
+<p>Update student collage, ID = @Uid</p>
+
+<p><input @bind="newNama" placeholder="Nama"/></p>
+<p><input @bind="newNim" placeholder="Nim" /></p>
+<p><input @bind="newAlamat" placeholder="Alamat" /></p>
+<p><input @bind="newEmail" placeholder="Email" /></p>
+<p><input @bind="newFoto" placeholder="Foto" /></p>
+<p><input @bind="newNim_progmob" placeholder="New NIM Progmob" /></p>
+<a href="/listMhs">
+<p>
+    <button type="button" class="btn btn-success m-1" @onclick="UpdateMhs">SAVE</button>
+    <button type="button" class="btn btn-danger m-1" @onclick="DeleteMhs">Delete</button>
+</p>
+</a>
+
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery(Name ="id")]
+    public int Uid {get;set;}
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "nama")]
+    public string newNama {get;set;}
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "nim")]
+    public string newNim {get;set;}
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "alamat")]
+    public string newAlamat {get;set;}
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "email")]
+    public string newEmail {get;set;}
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "foto")]
+    public string newFoto {get;set;}
+
+    public string? newNim_progmob;
+
+    public async Task AddMhs()
+    {
+        var ambilMhs = new Mahasiswa {  nama = newNama, nim = newNim, alamat = newAlamat, email = newEmail, foto = newFoto, nim_progmob = newNim_progmob };
+        await Http.PutAsJsonAsync("https://kpsi.fti.ukdw.ac.id/api/progmob/mhs/{nim_progmob}", ambilMhs);
+    }
+
+    public async Task UpdateMhs()
+    {
+        var UpdateMhs = new Mahasiswa {  nama = newNama, nim = newNim, nim_cari = newNim, alamat = newAlamat, email = newEmail, foto = newFoto, nim_progmob = newNim_progmob , id = Uid};
+        await Http.PostAsJsonAsync("https://kpsi.fti.ukdw.ac.id/api/progmob/mhs/update", UpdateMhs);
+    }
+
+    public async Task DeleteMhs()
+    {
+        var DeleteMhs = new Mahasiswa {  nim_progmob = newNim_progmob , id = Uid};
+        await Http.PostAsJsonAsync("https://kpsi.fti.ukdw.ac.id/api/progmob/mhs/delete", DeleteMhs);
+    }
+}

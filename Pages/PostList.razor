@@ -1,0 +1,62 @@
+@page "/postlist"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+
+<PageTitle>Post List User</PageTitle>   
+
+<h1>Post List User</h1>
+
+<p>This component shows the list of collage students.</p>
+
+@if (post == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID User</th>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Body</th>
+            </tr>
+        </thead>
+        <tbody> 
+            @foreach (var pt in post)
+            {
+                <tr>
+                    <td>@pt.userId</td>
+                    <td>@pt.id</td>
+                    <td>@pt.title</td>
+                    <td>@pt.body</td>
+                    @* <button class="btn btn-warning m-1"><a href="/updatemhs?id=@mh.id&nama=@mh.nama&nim=@mh.nim&alamat=@mh.alamat&email=@mh.email&foto=@mh.foto">Update</a></button> *@
+                    @* <a><button asp-page-handler="Delete" asp-route-id="@MahasiswaList.id" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-danger btn-sm">Delete</button></a>  *@
+                </tr>
+            }
+        </tbody>
+        <tbody>
+        </tbody>
+    </table>
+}
+
+@code {
+ 
+    protected override async Task OnInitializedAsync()
+    {
+        post = await Http.GetFromJsonAsync<List<Post>>("https://jsonplaceholder.typicode.com/posts");
+            searchUserData = post;
+    }
+
+    protected List<Post> searchUserData = new();
+    protected List<Post> post = new();
+    protected string SearchString { get; set;} = string.Empty;
+    protected void CariData(){
+        
+    }
+} 
+
+

@@ -1,0 +1,1 @@
+D:\kuliah\Semester 5\Pemrog. Front End\Blazorwasm\bin\Release\net6.0\publish\web.config

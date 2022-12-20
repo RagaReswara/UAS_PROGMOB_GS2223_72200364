@@ -1,0 +1,78 @@
+@page "/listmhs"
+@inject HttpClient Http
+
+<PageTitle>List Mahasiswa</PageTitle>   
+
+<h1>List Mahasiswa</h1>
+
+<p>This component shows the list of collage students.</p>
+
+@if (mhs == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="input-group col">
+        <input type="text" class="form-control m-1" placeholder="Search Mahasiswa" @bind="SearchString" />
+        <button class="btn btn-primary m-1" @onclick ="CariData">SEARCH</button>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nama</th>
+                <th>NIM</th>
+                <th>Alamat</th>
+                <th>Email</th>
+                <th>Foto</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody> 
+            @foreach (var mh in mhs)
+            {
+                <tr>
+                    <td>@mh.id</td>
+                    <td>@mh.nama</td>
+                    <td>@mh.nim</td>
+                    <td>@mh.alamat</td>
+                    <td>@mh.email</td>
+                    <td>@mh.foto</td>
+                    <button class="btn btn-warning m-1"><a href="/updatemhs?id=@mh.id&nama=@mh.nama&nim=@mh.nim&alamat=@mh.alamat&email=@mh.email&foto=@mh.foto">Update</a></button>
+                    @* <a><button asp-page-handler="Delete" asp-route-id="@MahasiswaList.id" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-danger btn-sm">Delete</button></a>  *@
+                </tr>
+            }
+        </tbody>
+        <tbody>
+            <div class="card-footer text-center">
+                <a href="addMhs" class="btn btn-success m-1">ADD</a>
+        </div>
+        </tbody>
+    </table>
+}
+
+@code {
+ 
+    protected override async Task OnInitializedAsync()
+    {
+        mhs = await Http.GetFromJsonAsync<List<Mahasiswa>>("https://kpsi.fti.ukdw.ac.id/api/progmob/mhs/72200364");
+            searchUserData = mhs;
+    }
+
+    protected List<Mahasiswa> searchUserData = new();
+    protected List<Mahasiswa> mhs = new();
+    protected string SearchString { get; set;} = string.Empty;
+    protected void CariData(){
+        if (!string.IsNullOrEmpty(SearchString))
+        {
+            mhs = searchUserData.Where(x => x.nim.IndexOf(SearchString, StringComparison.OrdinalIgnoreCase) != -1).ToList();
+        }
+        else
+        {
+            mhs = searchUserData;
+        }
+    }
+} 
+
+

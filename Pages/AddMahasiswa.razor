@@ -1,0 +1,31 @@
+@page "/addMhs"
+@using System.Net.Http
+@using System.Net.Http.Json
+@using System.Threading.Tasks
+@inject HttpClient Http
+
+<input @bind="newNama" placeholder="Nama" />
+<input @bind="newNim" placeholder="Nim" />
+<input @bind="newAlamat" placeholder="Alamat" />
+<input @bind="newEmail" placeholder="Email" />
+<input @bind="newFoto" placeholder="Foto" />
+<input @bind="newProgmob" placeholder="Progmob" />
+
+<button type="button" class="btn btn-primary m-1" @onclick="AddMhs">ADD</button>
+
+@code {
+    
+    public int newid ;
+    public string? newNama;
+    public string? newNim;
+    public string? newAlamat;
+    public string? newEmail;
+    public string? newFoto;
+    public string? newProgmob;
+
+    public async Task AddMhs()
+    {
+        var addItem = new Mahasiswa {  nama = newNama, nim = newNim, alamat = newAlamat, email = newEmail, foto = newFoto, nim_progmob = newProgmob };
+        await Http.PostAsJsonAsync("https://kpsi.fti.ukdw.ac.id/api/progmob/mhs/create", addItem);
+    }
+}

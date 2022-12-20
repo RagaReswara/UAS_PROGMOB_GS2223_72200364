@@ -1,0 +1,62 @@
+@page "/commentList"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+
+<PageTitle>List Comments</PageTitle>
+
+<h1>Comment List</h1>
+
+<p>This component demonstrates fetching data Comment from the server.</p>
+
+@if (com == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @* <NavLink class="btn btn-primary" href="/mahasiswa/tambah">ADD</NavLink> *@
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Post ID</th>
+                <th>ID</th>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>Body</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cm in com)
+            {
+                <tr>
+                    <td>@cm.postid</td>
+                    <td>@cm.id</td>
+                    <td>@cm.name</td>
+                    <td>@cm.email</td>
+                    <td>@cm.body</td>
+                    <td>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        com = await Http.GetFromJsonAsync<List<Comment>>("https://jsonplaceholder.typicode.com/comments");
+            searchUserData = com;
+    }
+
+    protected List<Comment> searchUserData = new();
+    protected List<Comment> com = new();
+    protected string SearchString { get; set;} = string.Empty;
+    protected void CariData(){
+     
+    }
+
+}
